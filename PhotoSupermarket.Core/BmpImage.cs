@@ -65,6 +65,23 @@ namespace PhotoSupermarket.Core
             return (theByteContainingResult & (1 << bitToShift)) != 0;
         }
 
+        public void Set1BitDataAt(int x, int y, bool data)
+        {
+            if (ColorMode != BitmapColorMode.MonoChrome) throw new NotThisColorModeException();
+            if (x >= Width || y >= Height) throw new ArgumentOutOfRangeException();
+
+            var theByteContainingResultIndex = ((int)Math.Ceiling((double)Width / 32) * 4) * y + (x / 8);
+            var bitToShift = 7 - (x % 8);
+            if (data == true)
+            {
+                Data[theByteContainingResultIndex] |= (byte) (1 << bitToShift);
+            }
+            else
+            {
+                Data[theByteContainingResultIndex] &= (byte)(~(1 << bitToShift));
+            }
+        }
+
         public byte Get8BitDataAt(int x, int y)
         {
             if (ColorMode != BitmapColorMode.TwoFiftySixColors) throw new NotThisColorModeException();
@@ -72,6 +89,15 @@ namespace PhotoSupermarket.Core
 
             var theByte = Data[((int)Math.Ceiling((double)Width / 4) * 4) * y + x];
             return theByte;
+        }
+
+        public void Set8BitDataAt(int x, int y, byte data)
+        {
+            if (ColorMode != BitmapColorMode.TwoFiftySixColors) throw new NotThisColorModeException();
+            if (x >= Width || y >= Height) throw new ArgumentOutOfRangeException();
+
+            var theByteIndex = ((int)Math.Ceiling((double)Width / 4) * 4) * y + x;
+            Data[theByteIndex] = data;
         }
 
         public RGB GetRGBDataAt(int x, int y)
@@ -88,6 +114,17 @@ namespace PhotoSupermarket.Core
             };
         }
 
+        public void SetRGBDataAt(int x, int y, RGB data)
+        {
+            if (ColorMode != BitmapColorMode.TrueColor) throw new NotThisColorModeException();
+            if (x >= Width || y >= Height) throw new ArgumentOutOfRangeException();
+
+            var firstByteIndex = ((int)Math.Ceiling((double)Width * 3 / 4) * 4) * y + x * 3;
+            Data[firstByteIndex + 2] = data.R;
+            Data[firstByteIndex + 1] = data.G;
+            Data[firstByteIndex] = data.B;
+        }
+
         public RGBA GetRGBADataAt(int x, int y)
         {
             if (ColorMode != BitmapColorMode.RGBA) throw new NotThisColorModeException();
@@ -101,6 +138,18 @@ namespace PhotoSupermarket.Core
                 B = Data[firstByteIndex + 1],
                 A = Data[firstByteIndex]
             };
+        }
+
+        public void SetRGBADataAt(int x, int y, RGBA data)
+        {
+            if (ColorMode != BitmapColorMode.RGBA) throw new NotThisColorModeException();
+            if (x >= Width || y >= Height) throw new ArgumentOutOfRangeException();
+
+            var firstByteIndex = (Width * 4 * y + x * 4);
+            Data[firstByteIndex + 3] = data.R;
+            Data[firstByteIndex + 2] = data.G;
+            Data[firstByteIndex + 1] = data.B;
+            Data[firstByteIndex] = data.A;
         }
     }
 
