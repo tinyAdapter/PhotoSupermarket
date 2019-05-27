@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 namespace PhotoSupermarket.Core.Util
 {
     [Serializable]
-    internal class NotValidImageFileException : Exception
+    public class NotValidImageFileException : Exception
     {
         public NotValidImageFileException()
         {

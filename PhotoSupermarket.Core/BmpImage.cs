@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using PhotoSupermarket.Core.Model;
 
 namespace PhotoSupermarket.Core
 {
@@ -52,12 +53,54 @@ namespace PhotoSupermarket.Core
         public byte[] Data { get; set; }
         public int Width { get; set; }
         public int Height { get; set; }
+        public BitmapColorMode ColorMode { get; set; }
 
-        public byte GetDataAt(int x, int y)
+        public bool Get1BitDataAt(int x, int y)
         {
-            if (x > Width || y > Height) throw new ArgumentOutOfRangeException();
+            if (ColorMode != BitmapColorMode.MonoChrome) throw new NotThisColorModeException();
+            if (x >= Width || y >= Height) throw new ArgumentOutOfRangeException();
 
-            throw new NotImplementedException();
+            var theByteContainingResult = Data[((int)Math.Ceiling((double)Width / 32) * 4) * y + (x / 8)];
+            var bitToShift = 7 - (x % 8);
+            return (theByteContainingResult & (1 << bitToShift)) != 0;
+        }
+
+        public byte Get8BitDataAt(int x, int y)
+        {
+            if (ColorMode != BitmapColorMode.TwoFiftySixColors) throw new NotThisColorModeException();
+            if (x >= Width || y >= Height) throw new ArgumentOutOfRangeException();
+
+            var theByte = Data[((int)Math.Ceiling((double)Width / 4) * 4) * y + x];
+            return theByte;
+        }
+
+        public RGB GetRGBDataAt(int x, int y)
+        {
+            if (ColorMode != BitmapColorMode.TrueColor) throw new NotThisColorModeException();
+            if (x >= Width || y >= Height) throw new ArgumentOutOfRangeException();
+
+            var firstByteIndex = ((int)Math.Ceiling((double)Width * 3 / 4) * 4) * y + x * 3;
+            return new RGB
+            {
+                R = Data[firstByteIndex],
+                G = Data[firstByteIndex + 1],
+                B = Data[firstByteIndex + 2]
+            };
+        }
+
+        public RGBA GetRGBADataAt(int x, int y)
+        {
+            if (ColorMode != BitmapColorMode.RGBA) throw new NotThisColorModeException();
+            if (x >= Width || y >= Height) throw new ArgumentOutOfRangeException();
+
+            var firstByteIndex = (Width * 4 * y + x * 4);
+            return new RGBA
+            {
+                R = Data[firstByteIndex],
+                G = Data[firstByteIndex + 1],
+                B = Data[firstByteIndex + 2],
+                A = Data[firstByteIndex + 3]
+            };
         }
     }
 
