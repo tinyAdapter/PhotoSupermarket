@@ -11,7 +11,8 @@ namespace PhotoSupermarket.Core
         public BitmapPaletteEntry[] Palette { get; set; }
         public BitmapData Data { get; set; }
 
-        public bool IsTrueColor => InfoHeader.BitCount == (ushort) BitmapColorMode.TrueColor;
+        public bool IsTrueColor => (InfoHeader.BitCount == (ushort) BitmapColorMode.TrueColor
+            || InfoHeader.BitCount == (ushort)BitmapColorMode.RGBA);
     }
 
     public class BitmapFileHeader
