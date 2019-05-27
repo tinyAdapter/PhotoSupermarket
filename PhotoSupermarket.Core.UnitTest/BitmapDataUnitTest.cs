@@ -60,21 +60,21 @@ namespace PhotoSupermarket.Core.UnitTest
             bitmapData.Height = 3;
             Assert.Equal(new RGB()
             {
-                R = 33,
+                R = 29,
                 G = 255,
-                B = 29
+                B = 33
             }, bitmapData.GetRGBDataAt(0, 0));
             Assert.Equal(new RGB()
             {
-                R = 39,
+                R = 12,
                 G = 88,
-                B = 12
+                B = 39
             }, bitmapData.GetRGBDataAt(2, 0));
             Assert.Equal(new RGB()
             {
-                R = 11,
+                R = 191,
                 G = 33,
-                B = 191
+                B = 11
             }, bitmapData.GetRGBDataAt(2, 2));
             Assert.Throws<ArgumentOutOfRangeException>(() => bitmapData.GetRGBDataAt(3, 1));
             Assert.Throws<NotThisColorModeException>(() => bitmapData.Get8BitDataAt(1, 0));
@@ -94,24 +94,24 @@ namespace PhotoSupermarket.Core.UnitTest
             bitmapData.Height = 3;
             Assert.Equal(new RGBA()
             {
-                R = 33,
-                G = 255,
-                B = 29,
-                A = 8
+                R = 8,
+                G = 29,
+                B = 255,
+                A = 33
             }, bitmapData.GetRGBADataAt(0, 0));
             Assert.Equal(new RGBA()
             {
-                R = 12,
+                R = 0,
                 G = 0,
                 B = 0,
-                A = 0
+                A = 12
             }, bitmapData.GetRGBADataAt(2, 0));
             Assert.Equal(new RGBA()
             {
-                R = 191,
+                R = 0,
                 G = 0,
                 B = 0,
-                A = 0
+                A = 191
             }, bitmapData.GetRGBADataAt(2, 2));
             Assert.Throws<ArgumentOutOfRangeException>(() => bitmapData.GetRGBADataAt(3, 1));
             Assert.Throws<NotThisColorModeException>(() => bitmapData.GetRGBDataAt(1, 0));

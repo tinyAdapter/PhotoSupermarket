@@ -82,9 +82,9 @@ namespace PhotoSupermarket.Core
             var firstByteIndex = ((int)Math.Ceiling((double)Width * 3 / 4) * 4) * y + x * 3;
             return new RGB
             {
-                R = Data[firstByteIndex],
+                R = Data[firstByteIndex + 2],
                 G = Data[firstByteIndex + 1],
-                B = Data[firstByteIndex + 2]
+                B = Data[firstByteIndex]
             };
         }
 
@@ -96,10 +96,10 @@ namespace PhotoSupermarket.Core
             var firstByteIndex = (Width * 4 * y + x * 4);
             return new RGBA
             {
-                R = Data[firstByteIndex],
-                G = Data[firstByteIndex + 1],
-                B = Data[firstByteIndex + 2],
-                A = Data[firstByteIndex + 3]
+                R = Data[firstByteIndex + 3],
+                G = Data[firstByteIndex + 2],
+                B = Data[firstByteIndex + 1],
+                A = Data[firstByteIndex]
             };
         }
     }
