@@ -33,10 +33,10 @@ namespace PhotoSupermarket.Core.Util
         {
             ParseFileHeader();
             ParseInfoHeader();
-            //ParsePalette();
+            ParsePalette();
             //ParseBitmapData();
         }
-        
+
         private void ParseFileHeader()
         {
             Image.FileHeader = new BitmapFileHeader();
@@ -84,7 +84,19 @@ namespace PhotoSupermarket.Core.Util
 
         private void ParsePalette()
         {
-            throw new NotImplementedException();
+            if (Image.HasPalette())
+            {
+                int totalPaletteEntries = Image.GetTotalPaletteEntries();
+                Image.Palette = new BitmapPaletteEntry[totalPaletteEntries];
+                for (int i = 0; i < totalPaletteEntries; i++)
+                {
+                    Image.Palette[i] = new BitmapPaletteEntry();
+                    Image.Palette[i].Blue = Bytes.ReadByte(imageBytes, ref currentIndex);
+                    Image.Palette[i].Green = Bytes.ReadByte(imageBytes, ref currentIndex);
+                    Image.Palette[i].Red = Bytes.ReadByte(imageBytes, ref currentIndex);
+                    Image.Palette[i].Flags = Bytes.ReadByte(imageBytes, ref currentIndex);
+                }
+            }
         }
 
         private void ParseBitmapData()
