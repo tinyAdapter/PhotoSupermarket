@@ -57,7 +57,8 @@ namespace PhotoSupermarket.Core.Util
         }
 
         private void ParseInfoHeader()
-        {//eli cao
+        {
+            //eli cao
             Image.InfoHeader = new BitmapInfoHeader();
             if((Image.InfoHeader.Size = Bytes.ReadUInt(imageBytes,ref currentIndex)) != 40)
             {
