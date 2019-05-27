@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PhotoSupermarket.Core", "Ph
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PhotoSupermarket.Console", "PhotoSupermarket.Console\PhotoSupermarket.Console.csproj", "{8DA12736-2B35-404E-A1C6-B7A63C4CD855}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhotoSupermarket.Core.UnitTest", "PhotoSupermarket.Core.UnitTest\PhotoSupermarket.Core.UnitTest.csproj", "{655D3D75-1108-4AC2-B159-0AB3B9814028}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{8DA12736-2B35-404E-A1C6-B7A63C4CD855}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8DA12736-2B35-404E-A1C6-B7A63C4CD855}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8DA12736-2B35-404E-A1C6-B7A63C4CD855}.Release|Any CPU.Build.0 = Release|Any CPU
+		{655D3D75-1108-4AC2-B159-0AB3B9814028}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{655D3D75-1108-4AC2-B159-0AB3B9814028}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{655D3D75-1108-4AC2-B159-0AB3B9814028}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{655D3D75-1108-4AC2-B159-0AB3B9814028}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
