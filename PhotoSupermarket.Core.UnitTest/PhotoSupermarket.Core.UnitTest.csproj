@@ -23,4 +23,8 @@
     <ProjectReference Include="..\PhotoSupermarket.Core\PhotoSupermarket.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="NewFolder\" />
+  </ItemGroup>
+
 </Project>

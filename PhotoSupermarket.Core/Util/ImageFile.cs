@@ -32,15 +32,13 @@ namespace PhotoSupermarket.Core.Util
         public void Parse()
         {
             ParseFileHeader();
-            //ParseInfoHeader();
+            ParseInfoHeader();
             //ParsePalette();
             //ParseBitmapData();
         }
         
         private void ParseFileHeader()
         {
-            Image.FileHeader = new BitmapFileHeader();
-
             Image.FileHeader = new BitmapFileHeader();
             if ((Image.FileHeader.Type = Bytes.ReadUShort(imageBytes, ref currentIndex)) != 0x4D42)
             {
@@ -59,8 +57,28 @@ namespace PhotoSupermarket.Core.Util
         }
 
         private void ParseInfoHeader()
-        {
-            throw new NotImplementedException();
+        {//eli cao
+            Image.InfoHeader = new BitmapInfoHeader();
+            if((Image.InfoHeader.Size = Bytes.ReadUInt(imageBytes,ref currentIndex)) != 40)
+            {
+                throw new NotValidImageFileException("biSize is not 40");
+            }
+            Image.InfoHeader.Width = Bytes.ReadInt(imageBytes, ref currentIndex);
+            Image.InfoHeader.Height = Bytes.ReadInt(imageBytes, ref currentIndex);
+            if ((Image.InfoHeader.Planes = Bytes.ReadUShort(imageBytes, ref currentIndex)) != 1)
+            {
+                throw new NotValidImageFileException("biPlanes is not 1");
+            }
+            Image.InfoHeader.BitCount = Bytes.ReadUShort(imageBytes, ref currentIndex);
+            Image.InfoHeader.Compression = Bytes.ReadUInt(imageBytes, ref currentIndex);
+            if((Image.InfoHeader.SizeImage = Bytes.ReadUInt(imageBytes, ref currentIndex)) != Image.FileHeader.Size - Image.FileHeader.OffBits)
+            {
+                throw new NotValidImageFileException();
+            }
+            Image.InfoHeader.XPelsPerMeter = Bytes.ReadInt(imageBytes, ref currentIndex);
+            Image.InfoHeader.YPelsPerMeter = Bytes.ReadInt(imageBytes, ref currentIndex);
+            Image.InfoHeader.ClrUsed = Bytes.ReadUInt(imageBytes, ref currentIndex);
+            Image.InfoHeader.ClrImportanet = Bytes.ReadUInt(imageBytes, ref currentIndex);
         }
 
         private void ParsePalette()

@@ -25,7 +25,7 @@ namespace PhotoSupermarket.Core
 
     public class BitmapInfoHeader
     {
-        public ushort Size { get; set; }        // Always = 40
+        public uint Size { get; set; }        // Always = 40
         public int Width { get; set; }          // In pixels
         public int Height { get; set; }         // In pixels
         public ushort Planes { get; set; }      // Always = 1

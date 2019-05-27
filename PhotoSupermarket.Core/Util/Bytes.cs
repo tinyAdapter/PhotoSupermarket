@@ -37,5 +37,21 @@ namespace PhotoSupermarket.Core.Util
             index += 4;
             return result;
         }
+
+        public static int ReadInt(byte[] bytes, ref int index)
+        {
+            int result;
+            if (BitConverter.IsLittleEndian)
+            {
+                result = BitConverter.ToInt32(bytes, index);
+            }
+            else
+            {
+                byte[] valueBytes = new byte[] { bytes[index + 1], bytes[index] };
+                result = BitConverter.ToInt32(bytes, index);
+            }
+            index += 4;
+            return result;
+        }
     }
 }
