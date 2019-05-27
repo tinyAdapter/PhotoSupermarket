@@ -6,6 +6,13 @@ namespace PhotoSupermarket.Core.Util
 {
     public class Bytes
     {
+        public static byte ReadByte(byte[] bytes, ref int index)
+        {
+            byte result = bytes[index];
+            index += 1;
+            return result;
+        }
+
         public static ushort ReadUShort(byte[] bytes, ref int index)
         {
             ushort result;
