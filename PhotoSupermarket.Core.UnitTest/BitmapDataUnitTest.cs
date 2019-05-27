@@ -272,5 +272,58 @@ namespace PhotoSupermarket.Core.UnitTest
             Assert.Throws<ArgumentOutOfRangeException>(() => bitmapData.SetRGBADataAt(3, 1, new RGBA()));
             Assert.Throws<NotThisColorModeException>(() => bitmapData.SetRGBDataAt(1, 0, new RGB()));
         }
+
+        [Fact]
+        public void TestLennaBitmapData()
+        {
+            var image = Util.ImageFile.LoadBmpImage("..\\..\\..\\TestImages\\lenna.bmp");
+            Assert.Equal(56, image.Data.Data[0]);
+            Assert.Equal(16, image.Data.Data[1]);
+            Assert.Equal(80, image.Data.Data[2]);
+            Assert.Equal(56, image.Data.Data[3]);
+            Assert.Equal(16, image.Data.Data[4]);
+
+            Assert.Equal(16, image.Data.Data[16]);
+
+            Assert.Equal(89, image.Data.Data[32]);
+
+
+            Assert.Equal(105, image.Data.Data[image.Data.Data.Length - 6]);
+            Assert.Equal(121, image.Data.Data[image.Data.Data.Length - 5]);
+            Assert.Equal(218, image.Data.Data[image.Data.Data.Length - 4]);
+            Assert.Equal(89, image.Data.Data[image.Data.Data.Length - 3]);
+            Assert.Equal(93, image.Data.Data[image.Data.Data.Length - 2]); 
+            Assert.Equal(198, image.Data.Data[image.Data.Data.Length - 1]);
+
+            Assert.Equal((BitmapColorMode)24, image.Data.ColorMode);
+
+            Assert.Equal(512, image.Data.Width);
+            Assert.Equal(512, image.Data.Height);
+        }
+
+        [Fact]
+        public void TestBarbaraBitmapData()
+        {
+            var image = Util.ImageFile.LoadBmpImage("..\\..\\..\\TestImages\\barbara.bmp");
+            Assert.Equal(9, image.Data.Data[0]);
+            Assert.Equal(17, image.Data.Data[1]);
+            Assert.Equal(9, image.Data.Data[2]);
+            Assert.Equal(10, image.Data.Data[3]);
+            Assert.Equal(16, image.Data.Data[4]);
+
+            Assert.Equal(66, image.Data.Data[16]);
+
+            Assert.Equal(94, image.Data.Data[32]);
+
+            Assert.Equal(10, image.Data.Data[image.Data.Data.Length - 4]);
+            Assert.Equal(11, image.Data.Data[image.Data.Data.Length - 3]);
+            Assert.Equal(15, image.Data.Data[image.Data.Data.Length - 2]);
+            Assert.Equal(9, image.Data.Data[image.Data.Data.Length - 1]);
+
+            Assert.Equal((BitmapColorMode)24, image.Data.ColorMode);
+
+            Assert.Equal(360, image.Data.Width);
+            Assert.Equal(288, image.Data.Height);
+        }
     }
 }

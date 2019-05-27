@@ -34,7 +34,7 @@ namespace PhotoSupermarket.Core.Util
             ParseFileHeader();
             ParseInfoHeader();
             ParsePalette();
-            //ParseBitmapData();
+            ParseBitmapData();
         }
 
         private void ParseFileHeader()
@@ -90,18 +90,30 @@ namespace PhotoSupermarket.Core.Util
                 Image.Palette = new BitmapPaletteEntry[totalPaletteEntries];
                 for (int i = 0; i < totalPaletteEntries; i++)
                 {
-                    Image.Palette[i] = new BitmapPaletteEntry();
-                    Image.Palette[i].Blue = Bytes.ReadByte(imageBytes, ref currentIndex);
-                    Image.Palette[i].Green = Bytes.ReadByte(imageBytes, ref currentIndex);
-                    Image.Palette[i].Red = Bytes.ReadByte(imageBytes, ref currentIndex);
-                    Image.Palette[i].Flags = Bytes.ReadByte(imageBytes, ref currentIndex);
+                    Image.Palette[i] = new BitmapPaletteEntry
+                    {
+                        Blue = Bytes.ReadByte(imageBytes, ref currentIndex),
+                        Green = Bytes.ReadByte(imageBytes, ref currentIndex),
+                        Red = Bytes.ReadByte(imageBytes, ref currentIndex),
+                        Flags = Bytes.ReadByte(imageBytes, ref currentIndex)
+                    };
                 }
             }
         }
 
         private void ParseBitmapData()
         {
-            throw new NotImplementedException();
+            Image.Data = new BitmapData
+            {
+                Width = Image.InfoHeader.Width,
+                Height = Image.InfoHeader.Height,
+                ColorMode = (BitmapColorMode)(Image.InfoHeader.BitCount)
+            };
+            Image.Data.Data = new byte[Image.InfoHeader.SizeImage];
+            for (int i = 0; i < Image.InfoHeader.SizeImage; i++)
+            {
+                Image.Data.Data[i] = Bytes.ReadByte(imageBytes,ref currentIndex);
+            }
         }
     }
 }
