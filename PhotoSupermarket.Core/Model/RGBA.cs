@@ -2,6 +2,12 @@
 {
     public class RGBA : RGB
     {
+        public RGBA() { }
+        public RGBA(byte R, byte G, byte B, byte A) : base(R, G, B)
+        {
+            this.A = A;
+        }
+
         public byte A { get; set; }
 
         // override object.Equals

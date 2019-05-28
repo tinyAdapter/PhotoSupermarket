@@ -12,9 +12,13 @@ namespace PhotoSupermarket.Core.Util
             return parser.Image;
         }
 
-        public static bool SaveBmpImage(BmpImage image, string filePath)
+        public static void SaveBmpImage(BmpImage image, string filePath)
         {
-            throw new NotImplementedException();
+            BmpImageGenerator generator = new BmpImageGenerator(image);
+            generator.Generate();
+            var fs = File.OpenWrite(filePath);
+            fs.Write(generator.ImageBytes, 0, generator.ImageBytes.Length);
+            fs.Close();
         }
     }
 
