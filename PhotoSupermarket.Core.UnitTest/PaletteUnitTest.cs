@@ -17,7 +17,6 @@ namespace PhotoSupermarket.Core.UnitTest
             var image2 = Util.ImageFile.LoadBmpImage("..\\..\\..\\TestImages\\lenna.bmp");
             Assert.Equal(24, image2.InfoHeader.BitCount);
             Assert.False(image2.HasPalette());
-
         }
     }
 }

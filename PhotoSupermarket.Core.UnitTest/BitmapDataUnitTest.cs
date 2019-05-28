@@ -104,24 +104,9 @@ namespace PhotoSupermarket.Core.UnitTest
             bitmapData.ColorMode = BitmapColorMode.TrueColor;
             bitmapData.Width = 3;
             bitmapData.Height = 3;
-            Assert.Equal(new RGB()
-            {
-                R = 29,
-                G = 255,
-                B = 33
-            }, bitmapData.GetRGBDataAt(0, 0));
-            Assert.Equal(new RGB()
-            {
-                R = 12,
-                G = 88,
-                B = 39
-            }, bitmapData.GetRGBDataAt(2, 0));
-            Assert.Equal(new RGB()
-            {
-                R = 191,
-                G = 33,
-                B = 11
-            }, bitmapData.GetRGBDataAt(2, 2));
+            Assert.Equal(new RGB(29, 255, 33), bitmapData.GetRGBDataAt(0, 0));
+            Assert.Equal(new RGB(12, 88, 39), bitmapData.GetRGBDataAt(2, 0));
+            Assert.Equal(new RGB(191, 33, 11), bitmapData.GetRGBDataAt(2, 2));
             Assert.Throws<ArgumentOutOfRangeException>(() => bitmapData.GetRGBDataAt(3, 1));
             Assert.Throws<NotThisColorModeException>(() => bitmapData.Get8BitDataAt(1, 0));
         }
@@ -138,42 +123,12 @@ namespace PhotoSupermarket.Core.UnitTest
             bitmapData.ColorMode = BitmapColorMode.TrueColor;
             bitmapData.Width = 3;
             bitmapData.Height = 3;
-            Assert.Equal(new RGB()
-            {
-                R = 29,
-                G = 255,
-                B = 33
-            }, bitmapData.GetRGBDataAt(0, 0));
-            bitmapData.SetRGBDataAt(0, 0, new RGB()
-            {
-                R = 12,
-                G = 88,
-                B = 39
-            });
-            Assert.Equal(new RGB()
-            {
-                R = 12,
-                G = 88,
-                B = 39
-            }, bitmapData.GetRGBDataAt(0, 0));
-            Assert.Equal(new RGB()
-            {
-                R = 191,
-                G = 33,
-                B = 11
-            }, bitmapData.GetRGBDataAt(2, 2));
-            bitmapData.SetRGBDataAt(2, 2, new RGB()
-            {
-                R = 29,
-                G = 255,
-                B = 33
-            });
-            Assert.Equal(new RGB()
-            {
-                R = 29,
-                G = 255,
-                B = 33
-            }, bitmapData.GetRGBDataAt(2, 2));
+            Assert.Equal(new RGB(29, 255, 33), bitmapData.GetRGBDataAt(0, 0));
+            bitmapData.SetRGBDataAt(0, 0, new RGB(12, 88, 39));
+            Assert.Equal(new RGB(12, 88, 39), bitmapData.GetRGBDataAt(0, 0));
+            Assert.Equal(new RGB(191, 33, 11), bitmapData.GetRGBDataAt(2, 2));
+            bitmapData.SetRGBDataAt(2, 2, new RGB(29, 255, 33));
+            Assert.Equal(new RGB(29, 255, 33), bitmapData.GetRGBDataAt(2, 2));
             Assert.Throws<ArgumentOutOfRangeException>(() => bitmapData.SetRGBDataAt(3, 1, new RGB()));
             Assert.Throws<NotThisColorModeException>(() => bitmapData.Set8BitDataAt(1, 0, 244));
         }
@@ -190,27 +145,9 @@ namespace PhotoSupermarket.Core.UnitTest
             bitmapData.ColorMode = BitmapColorMode.RGBA;
             bitmapData.Width = 3;
             bitmapData.Height = 3;
-            Assert.Equal(new RGBA()
-            {
-                R = 8,
-                G = 29,
-                B = 255,
-                A = 33
-            }, bitmapData.GetRGBADataAt(0, 0));
-            Assert.Equal(new RGBA()
-            {
-                R = 0,
-                G = 0,
-                B = 0,
-                A = 12
-            }, bitmapData.GetRGBADataAt(2, 0));
-            Assert.Equal(new RGBA()
-            {
-                R = 0,
-                G = 0,
-                B = 0,
-                A = 191
-            }, bitmapData.GetRGBADataAt(2, 2));
+            Assert.Equal(new RGBA(8, 29, 255, 33), bitmapData.GetRGBADataAt(0, 0));
+            Assert.Equal(new RGBA(0, 0, 0, 12), bitmapData.GetRGBADataAt(2, 0));
+            Assert.Equal(new RGBA(0, 0, 0, 191), bitmapData.GetRGBADataAt(2, 2));
             Assert.Throws<ArgumentOutOfRangeException>(() => bitmapData.GetRGBADataAt(3, 1));
             Assert.Throws<NotThisColorModeException>(() => bitmapData.GetRGBDataAt(1, 0));
         }
@@ -227,48 +164,12 @@ namespace PhotoSupermarket.Core.UnitTest
             bitmapData.ColorMode = BitmapColorMode.RGBA;
             bitmapData.Width = 3;
             bitmapData.Height = 3;
-            Assert.Equal(new RGBA()
-            {
-                R = 8,
-                G = 29,
-                B = 255,
-                A = 33
-            }, bitmapData.GetRGBADataAt(0, 0));
-            bitmapData.SetRGBADataAt(0, 0, new RGBA()
-            {
-                R = 8,
-                G = 29,
-                B = 2,
-                A = 33
-            });
-            Assert.Equal(new RGBA()
-            {
-                R = 8,
-                G = 29,
-                B = 2,
-                A = 33
-            }, bitmapData.GetRGBADataAt(0, 0));
-            Assert.Equal(new RGBA()
-            {
-                R = 0,
-                G = 0,
-                B = 0,
-                A = 191
-            }, bitmapData.GetRGBADataAt(2, 2));
-            bitmapData.SetRGBADataAt(2, 2, new RGBA()
-            {
-                R = 8,
-                G = 29,
-                B = 255,
-                A = 33
-            });
-            Assert.Equal(new RGBA()
-            {
-                R = 8,
-                G = 29,
-                B = 255,
-                A = 33
-            }, bitmapData.GetRGBADataAt(2, 2));
+            Assert.Equal(new RGBA(8, 29, 255, 33), bitmapData.GetRGBADataAt(0, 0));
+            bitmapData.SetRGBADataAt(0, 0, new RGBA(8, 39, 2, 33));
+            Assert.Equal(new RGBA(8, 39, 2, 33), bitmapData.GetRGBADataAt(0, 0));
+            Assert.Equal(new RGBA(0, 0, 0, 191), bitmapData.GetRGBADataAt(2, 2));
+            bitmapData.SetRGBADataAt(2, 2, new RGBA(8, 29, 255, 33));
+            Assert.Equal(new RGBA(8, 29, 255, 33), bitmapData.GetRGBADataAt(2, 2));
             Assert.Throws<ArgumentOutOfRangeException>(() => bitmapData.SetRGBADataAt(3, 1, new RGBA()));
             Assert.Throws<NotThisColorModeException>(() => bitmapData.SetRGBDataAt(1, 0, new RGB()));
         }
