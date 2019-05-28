@@ -60,5 +60,48 @@ namespace PhotoSupermarket.Core.Util
             index += 4;
             return result;
         }
+
+        public static void ToBytes(byte[] bytes, byte value, ref int index)
+        {
+            bytes[index] = value;
+            index += 1;
+        }
+
+        public static void ToBytes(byte[] bytes, ushort value, ref int index)
+        {
+            byte[] valueBytes = BitConverter.GetBytes(value);
+            if (!BitConverter.IsLittleEndian)
+            {
+                Array.Reverse(valueBytes);
+            }
+            bytes[index++] = valueBytes[0];
+            bytes[index++] = valueBytes[1];
+        }
+
+        public static void ToBytes(byte[] bytes, uint value, ref int index)
+        {
+            byte[] valueBytes = BitConverter.GetBytes(value);
+            if (!BitConverter.IsLittleEndian)
+            {
+                Array.Reverse(valueBytes);
+            }
+            bytes[index++] = valueBytes[0];
+            bytes[index++] = valueBytes[1];
+            bytes[index++] = valueBytes[2];
+            bytes[index++] = valueBytes[3];
+        }
+
+        public static void ToBytes(byte[] bytes, int value, ref int index)
+        {
+            byte[] valueBytes = BitConverter.GetBytes(value);
+            if (!BitConverter.IsLittleEndian)
+            {
+                Array.Reverse(valueBytes);
+            }
+            bytes[index++] = valueBytes[0];
+            bytes[index++] = valueBytes[1];
+            bytes[index++] = valueBytes[2];
+            bytes[index++] = valueBytes[3];
+        }
     }
 }
