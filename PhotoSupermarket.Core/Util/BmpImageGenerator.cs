@@ -9,15 +9,21 @@ namespace PhotoSupermarket.Core.Util
         public byte[] ImageBytes { get; private set; }
         private BmpImage image;
         private int currentIndex = 0;
+        private int offBits;
 
         public BmpImageGenerator(BmpImage image)
         {
             this.image = image;
+
+            int paletteBitCount = 0;
+            if (image.Data.ColorMode == BitmapColorMode.MonoChrome) paletteBitCount = 2 * 4;
+            else if (image.Data.ColorMode == BitmapColorMode.TwoFiftySixColors) paletteBitCount = 256 * 4;
+            offBits = 14 + 40 + paletteBitCount;
         }
 
         public void Generate()
         {
-            ImageBytes = new byte[image.FileHeader.Size];
+            ImageBytes = new byte[offBits + image.Data.GetRealSize()];
             GenerateFileHeader();
             GenerateInfoHeader();
             GeneratePalette();
@@ -26,7 +32,6 @@ namespace PhotoSupermarket.Core.Util
 
         private void GenerateFileHeader()
         {
-            uint offBits = 14 + 40 + (uint)(image.HasPalette() ? image.Palette.Length * 4 : 0);
             Bytes.ToBytes(ImageBytes, (ushort)0x4D42, ref currentIndex);
             Bytes.ToBytes(ImageBytes, (uint)(offBits + image.Data.GetRealSize()), ref currentIndex);
             Bytes.ToBytes(ImageBytes, (ushort)0, ref currentIndex);
@@ -51,9 +56,10 @@ namespace PhotoSupermarket.Core.Util
 
         private void GeneratePalette()
         {
-            if (!image.HasPalette()) return;
+            if (image.Data.ColorMode == BitmapColorMode.TrueColor
+                || image.Data.ColorMode == BitmapColorMode.RGBA) return;
 
-            int totalPaletteEntries = image.GetTotalPaletteEntries();
+            int totalPaletteEntries = (int)Math.Pow(2, (int)image.Data.ColorMode);
             for (int i = 0; i < totalPaletteEntries; i++)
             {
                 Bytes.ToBytes(ImageBytes, image.Palette[i].Blue, ref currentIndex);
@@ -65,7 +71,8 @@ namespace PhotoSupermarket.Core.Util
 
         private void GenerateData()
         {
-            for (int i = 0; i < image.InfoHeader.SizeImage; i++)
+            int dataSize = image.Data.GetRealSize();
+            for (int i = 0; i < dataSize; i++)
             {
                 Bytes.ToBytes(ImageBytes, image.Data.Data[i], ref currentIndex);
             }

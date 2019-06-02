@@ -60,8 +60,8 @@ namespace PhotoSupermarket.Core
         public byte Blue { get; set; }
         public byte Flags { get; set; }         // Alpha channel
     }
-
-    public class BitmapData
+    
+    public class BitmapData : ICloneable
     {
         public byte[] Data { get; set; }
         public int Width { get; set; }
@@ -184,6 +184,11 @@ namespace PhotoSupermarket.Core
             Data[firstByteIndex + 2] = data.G;
             Data[firstByteIndex + 1] = data.B;
             Data[firstByteIndex] = data.A;
+        }
+
+        public object Clone()
+        {
+            return this.MemberwiseClone();
         }
     }
 
