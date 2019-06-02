@@ -47,6 +47,14 @@ namespace PhotoSupermarket.Core
 
     public class BitmapPaletteEntry
     {
+        public BitmapPaletteEntry() { }
+        public BitmapPaletteEntry(byte R, byte G, byte B, byte F)
+        {
+            Red = R;
+            Green = G;
+            Blue = B;
+            Flags = F;
+        }
         public byte Red { get; set; }
         public byte Green { get; set; }
         public byte Blue { get; set; }
@@ -59,6 +67,27 @@ namespace PhotoSupermarket.Core
         public int Width { get; set; }
         public int Height { get; set; }
         public BitmapColorMode ColorMode { get; set; }
+
+        public int GetRealSize()
+        {
+            int result = 0;
+            switch (ColorMode)
+            {
+                case BitmapColorMode.MonoChrome:
+                    result = ((int)Math.Ceiling((double)Width / 32) * 4) * Height;
+                    break;
+                case BitmapColorMode.TwoFiftySixColors:
+                    result = ((int)Math.Ceiling((double)Width / 4) * 4) * Height;
+                    break;
+                case BitmapColorMode.TrueColor:
+                    result = ((int)Math.Ceiling((double)Width * 3 / 4) * 4) * Height;
+                    break;
+                case BitmapColorMode.RGBA:
+                    result = 4 * Width * Height;
+                    break;
+            }
+            return result;
+        }
 
         public bool Get1BitDataAt(int x, int y)
         {

@@ -26,26 +26,27 @@ namespace PhotoSupermarket.Core.Util
 
         private void GenerateFileHeader()
         {
-            Bytes.ToBytes(ImageBytes, image.FileHeader.Type, ref currentIndex);
-            Bytes.ToBytes(ImageBytes, image.FileHeader.Size, ref currentIndex);
-            Bytes.ToBytes(ImageBytes, image.FileHeader.Reserved1, ref currentIndex);
-            Bytes.ToBytes(ImageBytes, image.FileHeader.Reserved2, ref currentIndex);
-            Bytes.ToBytes(ImageBytes, image.FileHeader.OffBits, ref currentIndex);
+            uint offBits = 14 + 40 + (uint)(image.HasPalette() ? image.Palette.Length * 4 : 0);
+            Bytes.ToBytes(ImageBytes, (ushort)0x4D42, ref currentIndex);
+            Bytes.ToBytes(ImageBytes, (uint)(offBits + image.Data.GetRealSize()), ref currentIndex);
+            Bytes.ToBytes(ImageBytes, (ushort)0, ref currentIndex);
+            Bytes.ToBytes(ImageBytes, (ushort)0, ref currentIndex);
+            Bytes.ToBytes(ImageBytes, offBits, ref currentIndex);
         }
 
         private void GenerateInfoHeader()
         {
-            Bytes.ToBytes(ImageBytes, image.InfoHeader.Size, ref currentIndex);
-            Bytes.ToBytes(ImageBytes, image.InfoHeader.Width, ref currentIndex);
-            Bytes.ToBytes(ImageBytes, image.InfoHeader.Height, ref currentIndex);
-            Bytes.ToBytes(ImageBytes, image.InfoHeader.Planes, ref currentIndex);
-            Bytes.ToBytes(ImageBytes, image.InfoHeader.BitCount, ref currentIndex);
-            Bytes.ToBytes(ImageBytes, image.InfoHeader.Compression, ref currentIndex);
-            Bytes.ToBytes(ImageBytes, image.InfoHeader.SizeImage, ref currentIndex);
-            Bytes.ToBytes(ImageBytes, image.InfoHeader.XPelsPerMeter, ref currentIndex);
-            Bytes.ToBytes(ImageBytes, image.InfoHeader.YPelsPerMeter, ref currentIndex);
-            Bytes.ToBytes(ImageBytes, image.InfoHeader.ClrUsed, ref currentIndex);
-            Bytes.ToBytes(ImageBytes, image.InfoHeader.ClrImportanet, ref currentIndex);
+            Bytes.ToBytes(ImageBytes, (uint)40, ref currentIndex);
+            Bytes.ToBytes(ImageBytes, image.Data.Width, ref currentIndex);
+            Bytes.ToBytes(ImageBytes, image.Data.Height, ref currentIndex);
+            Bytes.ToBytes(ImageBytes, (ushort)1, ref currentIndex);
+            Bytes.ToBytes(ImageBytes, (ushort)image.Data.ColorMode, ref currentIndex);
+            Bytes.ToBytes(ImageBytes, (uint)0, ref currentIndex);
+            Bytes.ToBytes(ImageBytes, (uint)image.Data.GetRealSize(), ref currentIndex);
+            Bytes.ToBytes(ImageBytes, 0, ref currentIndex);
+            Bytes.ToBytes(ImageBytes, 0, ref currentIndex);
+            Bytes.ToBytes(ImageBytes, (uint)0, ref currentIndex);
+            Bytes.ToBytes(ImageBytes, (uint)0, ref currentIndex);
         }
 
         private void GeneratePalette()
