@@ -31,8 +31,22 @@ namespace PhotoSupermarket.Core.ModeConverter
 
     public class SingleThresholdConverter : GrayToBinaryConverter
     {
-        public SingleThresholdConverter(BmpImage data) : base(data)
+        private int Threshold { get; set; }
+
+        public SingleThresholdConverter(BmpImage data, int threshold) : base(data)
         {
+            if (threshold < 0 || threshold > 255)
+            {
+                throw new ArgumentOutOfRangeException();
+            }
+            else if (threshold == 0)
+            {
+                Threshold = 128;
+            }
+            else
+            {
+                Threshold = threshold;
+            }
         }
 
         protected override void ConvertBitmapData()
@@ -42,7 +56,7 @@ namespace PhotoSupermarket.Core.ModeConverter
                 for (int j = 0; j < Image.Data.Height; j++)
                 {
                     byte temp = oldData.Get8BitDataAt(i, j);
-                    if (temp >= 128)
+                    if (temp >= Threshold)
                     {
                         Image.Data.Set1BitDataAt(i, j, true);
                     }
