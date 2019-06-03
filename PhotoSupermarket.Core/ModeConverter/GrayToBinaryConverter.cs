@@ -8,6 +8,8 @@ namespace PhotoSupermarket.Core.ModeConverter
     {
         public GrayToBinaryConverter(BmpImage data) : base(data)
         {
+            if (data.Data.ColorMode != BitmapColorMode.TwoFiftySixColors)
+                throw new NotThisColorModeException("Gray ToBinary Converters are only for Gray images");
         }
 
         protected override void DoConvert()
