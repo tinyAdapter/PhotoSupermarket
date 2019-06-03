@@ -30,6 +30,7 @@ namespace PhotoSupermarket.Core.HistogramEqualization
             {
                 for (int k = 0; k < oldData.Height; k++)
                 {
+               
                     histogram[oldData.Get8BitDataAt(i, k)]++;
                 }
             }
@@ -55,7 +56,7 @@ namespace PhotoSupermarket.Core.HistogramEqualization
             {
                 for (int k = 0; k < Image.Data.Height; k++)
                 {
-                    Image.Data.Set8BitDataAt(i, k, S[oldData.Get8BitDataAt(i, k)]);
+                    Image.Data.Set8BitDataAt(i, k, (byte)S[oldData.Get8BitDataAt(i, k)]);
                 }
             }
         }
