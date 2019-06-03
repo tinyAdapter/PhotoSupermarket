@@ -190,6 +190,11 @@ namespace PhotoSupermarket.Core
         {
             return this.MemberwiseClone();
         }
+
+        internal void Set8BitDataAt(int i, int k, int v)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public enum BitmapColorMode
