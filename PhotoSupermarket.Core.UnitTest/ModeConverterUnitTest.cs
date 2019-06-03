@@ -121,8 +121,8 @@ namespace PhotoSupermarket.Core.UnitTest
         {
             var image = Util.ImageFile.LoadBmpImage("..\\..\\..\\TestImages\\lenna.bmp");
             image = new YCbCrConverter(image).Convert().Image;
-            Util.ImageFile.SaveBmpImage(image, "..\\..\\..\\TestImages\\lenna_gray_ycbcr_modified.bmp");
-            image = Util.ImageFile.LoadBmpImage("..\\..\\..\\TestImages\\lenna_gray_ycbcr_modified.bmp");
+            Util.ImageFile.SaveBmpImage(image, "..\\..\\..\\TestImages\\lenna_gray_modified.bmp");
+            image = Util.ImageFile.LoadBmpImage("..\\..\\..\\TestImages\\lenna_gray_modified.bmp");
             // File header
             Assert.Equal(0x4D42, image.FileHeader.Type);
             Assert.Equal((uint)(14 + 40 + 256 * 4 + 512 * 512), image.FileHeader.Size);
@@ -150,6 +150,42 @@ namespace PhotoSupermarket.Core.UnitTest
                 Assert.Equal(i, image.Palette[i].Blue);
                 Assert.Equal(0, image.Palette[i].Flags);
             }
+        }
+
+        [Fact]
+        public void TestOrderedDitherConverter()
+        {
+            var image = Util.ImageFile.LoadBmpImage("..\\..\\..\\TestImages\\lenna_gray.bmp");
+            image = new OrderedDitherConverter(image, 2).Convert().Image;
+            Util.ImageFile.SaveBmpImage(image, "..\\..\\..\\TestImages\\lenna_ordered_dither_modified.bmp");
+            image = Util.ImageFile.LoadBmpImage("..\\..\\..\\TestImages\\lenna_ordered_dither_modified.bmp");
+            // File header
+            Assert.Equal(0x4D42, image.FileHeader.Type);
+            Assert.Equal((uint)(14 + 40 + 2 * 4 + image.Data.GetRealSize()), image.FileHeader.Size);
+            Assert.Equal(0, image.FileHeader.Reserved1);
+            Assert.Equal(0, image.FileHeader.Reserved2);
+            Assert.Equal((uint)(14 + 40 + 2 * 4), image.FileHeader.OffBits);
+            // Info header
+            Assert.Equal(40u, image.InfoHeader.Size);
+            Assert.Equal(300, image.InfoHeader.Width);
+            Assert.Equal(300, image.InfoHeader.Height);
+            Assert.Equal(1u, image.InfoHeader.Planes);
+            Assert.Equal(1u, image.InfoHeader.BitCount);
+            Assert.Equal(0u, image.InfoHeader.Compression);
+            Assert.Equal((uint)image.Data.GetRealSize(), image.InfoHeader.SizeImage);
+            Assert.Equal(0, image.InfoHeader.XPelsPerMeter);
+            Assert.Equal(0, image.InfoHeader.YPelsPerMeter);
+            Assert.Equal(0u, image.InfoHeader.ClrUsed);
+            Assert.Equal(0u, image.InfoHeader.ClrImportanet);
+            // Palette
+            Assert.Equal(0, image.Palette[0].Red);
+            Assert.Equal(0, image.Palette[0].Green);
+            Assert.Equal(0, image.Palette[0].Blue);
+            Assert.Equal(0, image.Palette[0].Flags);
+            Assert.Equal(255, image.Palette[1].Red);
+            Assert.Equal(255, image.Palette[1].Green);
+            Assert.Equal(255, image.Palette[1].Blue);
+            Assert.Equal(0, image.Palette[1].Flags);
         }
     }
 }
