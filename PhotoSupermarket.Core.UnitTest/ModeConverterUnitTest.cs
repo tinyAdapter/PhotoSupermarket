@@ -137,6 +137,22 @@ namespace PhotoSupermarket.Core.UnitTest
             Assert.Equal(8u, image.InfoHeader.BitCount);
             Assert.Equal(0u, image.InfoHeader.Compression);
             Assert.Equal((uint)(512 * 512), image.InfoHeader.SizeImage);
+            Assert.Equal(0, image.InfoHeader.XPelsPerMeter);
+            Assert.Equal(0, image.InfoHeader.YPelsPerMeter);
+            Assert.Equal(0u, image.InfoHeader.ClrUsed);
+            Assert.Equal(0u, image.InfoHeader.ClrImportanet);
+            // Palette
+            Assert.Equal(256, image.Palette.Length);
+            for (int i = 0; i < image.Palette.Length; i++)
+            {
+                Assert.Equal(i, image.Palette[i].Red);
+                Assert.Equal(i, image.Palette[i].Green);
+                Assert.Equal(i, image.Palette[i].Blue);
+                Assert.Equal(0, image.Palette[i].Flags);
+            }
+        }
+
+        [Fact]
         public void TestOrderedDitherConverter()
         {
             var image = Util.ImageFile.LoadBmpImage("..\\..\\..\\TestImages\\lenna_gray.bmp");
