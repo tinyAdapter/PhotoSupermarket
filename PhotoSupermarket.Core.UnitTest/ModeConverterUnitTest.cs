@@ -48,7 +48,7 @@ namespace PhotoSupermarket.Core.UnitTest
         public void TestSingleThresholdConverter()
         {
             var image = Util.ImageFile.LoadBmpImage("..\\..\\..\\TestImages\\lenna_gray.bmp");
-            image = new SingleThresholdConverter(image).Convert().Image;
+            image = new SingleThresholdConverter(image, 0).Convert().Image;
             Util.ImageFile.SaveBmpImage(image, "..\\..\\..\\TestImages\\lenna_single_threshold.bmp");
             image = Util.ImageFile.LoadBmpImage("..\\..\\..\\TestImages\\lenna_single_threshold.bmp");
             // File header
