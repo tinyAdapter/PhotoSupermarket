@@ -21,6 +21,15 @@ namespace PhotoSupermarket.Core.Compression
             UniformQuantizingCompress();
         }
 
+        // no CR means IGS Uniform Quantizing (CR = 2)
+        public UniformQuantizing(BmpImage image)
+        {
+            QuantizingInterval = 16.0;
+            TotalIntervals = 16;
+            Image = image;
+            IGSUniformQuantizaing();
+        }
+
         // the result bits of this method range from 1-8.
         public void UniformQuantizingCompress()
         {
@@ -42,7 +51,31 @@ namespace PhotoSupermarket.Core.Compression
             }
         }
 
+        public void IGSUniformQuantizaing()
+        {
+            if (Image.Data.ColorMode != BitmapColorMode.TwoFiftySixColors)
+            {
+                throw new NotThisColorModeException();
+            }
+
+            UniformQuantizingData = new byte[Image.Data.Width, Image.Data.Height];
+            byte lastSum = 0;
+
+            for (int i = 0; i < Image.Data.Width; i++)
+            {
+                for (int j = 0; j < Image.Data.Height; j++)
+                {
+                    byte originalColor = Image.Data.Get8BitDataAt(i, j);
+                    byte newSum = (byte)Math.Min(((lastSum % 16) + originalColor), 255);
+                    byte newColor = (byte)(newSum / 16);
+                    UniformQuantizingData[i, j] = newColor;
+                    lastSum = newSum;
+                }
+            }
+        }
+
         // this method only returns a bitmap with 1/8 bit(s).
+        // this method works for both Uniform Quantizing and IGS.
         public BmpImage InverseUniformQuantizaing()
         {
             if (UniformQuantizingData == null) throw new UnauthorizedAccessException();

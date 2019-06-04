@@ -38,5 +38,15 @@ namespace PhotoSupermarket.Core.UnitTest
             ImageFile.SaveBmpImage(uqImage, "..\\..\\..\\TestImages\\lenna_uq8_modified.bmp");
             Assert.Equal(2, uq.TotalIntervals);
         }
+
+        [Fact]
+        public void TestIGSUniformQuantizing()
+        {
+            var image = ImageFile.LoadBmpImage("..\\..\\..\\TestImages\\lenna_gray.bmp");
+            UniformQuantizing igs = new UniformQuantizing(image);
+            BmpImage igsImage = igs.InverseUniformQuantizaing();
+            ImageFile.SaveBmpImage(igsImage, "..\\..\\..\\TestImages\\lenna_igs_modified.bmp");
+            Assert.Equal(16, igs.TotalIntervals);
+        }
     }
 }
