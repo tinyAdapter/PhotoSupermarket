@@ -1,22 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using PhotoSupermarket.Core.Util;
+using PhotoSupermarket.Core.Model;
 
 namespace PhotoSupermarket.Core.HistogramEqualization
 {
-    public class GrayEqualization : BaseHistogram
+    public class ColorEqualization : BaseHistogram
     {
-        public GrayEqualization(BmpImage image) : base(image)
+        public ColorEqualization(BmpImage image) : base(image)
         {
         }
 
-        public int[] hist;
-        public int[] S;
-        public int level = 256;
+        public int[] histV;
+        public float[] SV;
+        public int level = 256; 
+
 
         protected override void DoEqualization()
         {
-            if (Image.Data.ColorMode != BitmapColorMode.TwoFiftySixColors)
+            if (Image.Data.ColorMode != BitmapColorMode.TrueColor)
                 throw new NotThisColorModeException();
             GetHistogram();
             Transformation();
@@ -24,20 +27,19 @@ namespace PhotoSupermarket.Core.HistogramEqualization
 
         public void GetHistogram()
         {
-            hist = new int[level];
+            histV = new int[level];
 
             for (int i = 0; i < oldData.Width; i++)
             {
                 for (int k = 0; k < oldData.Height; k++)
                 {
-
-                    hist[oldData.Get8BitDataAt(i, k)]++;
+                    histV[(int)(HSVAndRGB.RGB2HSV(oldData.GetRGBDataAt(i, k)).V *255)]++;
                 }
             }
 
             for (int i = 1; i < level; i++)
             {
-                hist[i] += hist[i-1];
+                histV[i] += histV[i - 1];
             }
         }
 
@@ -45,20 +47,25 @@ namespace PhotoSupermarket.Core.HistogramEqualization
         public void Transformation()
         {
 
-            S = new int[level];
+            SV = new float[level];
             int size = oldData.Width * oldData.Height;
             for (int i = 0; i < level; i++)
             {
-                S[i] = (int)Math.Round((level - 1) * (hist[i] * 1.0) / size);
+                SV[i] = (histV[i] * 1.0F) / size;
             }
 
             for (int i = 0; i < Image.Data.Width; i++)
             {
                 for (int k = 0; k < Image.Data.Height; k++)
                 {
-                    Image.Data.Set8BitDataAt(i, k, (byte)S[oldData.Get8BitDataAt(i, k)]);
+                    HSV oldHsv= HSVAndRGB.RGB2HSV(oldData.GetRGBDataAt(i,k));
+                    oldHsv.V = SV[(int)(oldHsv.V*255)];
+                    Image.Data.SetRGBDataAt(i, k, HSVAndRGB.HSV2RGB(oldHsv));
                 }
             }
         }
-    }
+
+        
+
+    } 
 }
