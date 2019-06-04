@@ -81,5 +81,6 @@ namespace PhotoSupermarket.Core.Compression
             return (byte)Math.Round(predictResult);
         }
 
+
     }
 }
