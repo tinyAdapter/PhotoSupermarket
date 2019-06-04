@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PhotoSupermarket.Core.Util;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -26,7 +27,7 @@ namespace PhotoSupermarket.Core.Compression
                 throw new NotThisColorModeException();
             }
 
-            BmpImage result = NewGrayScaleImage(Image.Data.Width, Image.Data.Height);
+            BmpImage result = BmpImageAllocator.NewGrayScaleImage(Image.Data.Width, Image.Data.Height);
             DCTData = new double[Image.Data.Width, Image.Data.Height];
 
             for (int i = 0; i < Image.Data.Width / BlockSize; i++)
@@ -67,7 +68,7 @@ namespace PhotoSupermarket.Core.Compression
             if (DCTData == null) throw new UnauthorizedAccessException();
             if (compressRatio < 1.0) throw new ArgumentOutOfRangeException();
 
-            BmpImage result = NewGrayScaleImage(Image.Data.Width, Image.Data.Height);
+            BmpImage result = BmpImageAllocator.NewGrayScaleImage(Image.Data.Width, Image.Data.Height);
 
             for (int i = 0; i < Image.Data.Width / BlockSize; i++)
             {
@@ -104,26 +105,26 @@ namespace PhotoSupermarket.Core.Compression
             return result;
         }
 
-        private BmpImage NewGrayScaleImage(int width, int height)
-        {
-            BmpImage result = new BmpImage()
-            {
-                Palette = new BitmapPaletteEntry[256]
-            };
-            for (int i = 0; i < 256; i++)
-            {
-                result.Palette[i] = new BitmapPaletteEntry((byte)i, (byte)i, (byte)i, 0);
-            }
-            result.Data = new BitmapData
-            {
-                ColorMode = BitmapColorMode.TwoFiftySixColors,
-                Width = width,
-                Height = height
-            };
-            result.Data.Data = new byte[result.Data.GetRealSize()];
+        //private BmpImage NewGrayScaleImage(int width, int height)
+        //{
+        //    BmpImage Result = new BmpImage()
+        //    {
+        //        Palette = new BitmapPaletteEntry[256]
+        //    };
+        //    for (int i = 0; i < 256; i++)
+        //    {
+        //        Result.Palette[i] = new BitmapPaletteEntry((byte)i, (byte)i, (byte)i, 0);
+        //    }
+        //    Result.Data = new BitmapData
+        //    {
+        //        ColorMode = BitmapColorMode.TwoFiftySixColors,
+        //        Width = width,
+        //        Height = height
+        //    }; 
+        //    Result.Data.Data = new byte[Result.Data.GetRealSize()];
 
-            return result;
-        }
+        //    return Result;
+        //}
 
 
         public static double[,] GenerateDCTBlock(int[,] originalBlock)
