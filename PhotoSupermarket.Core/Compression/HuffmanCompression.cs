@@ -9,22 +9,31 @@ namespace PhotoSupermarket.Core.Compression
     public class HuffmanCompression
     {
 
-        public static void Main(string[] args)
+        public static void Test()
         {
-            Console.WriteLine("&&&&&&&&&&&");
-            byte[] bytes = new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
+            byte[] bytes = new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 };
             HuffmanCompression huff = new HuffmanCompression(bytes);
             huff.Compress("F:\\CourseFile\\MultimediaTechnology\\PhotoSupermarket\\PhotoSupermarket.Core.UnitTest\\TestImages\\huff_dictionary_test.bi");
             byte[] storedBytes = File.ReadAllBytes("F:\\CourseFile\\MultimediaTechnology\\PhotoSupermarket\\PhotoSupermarket.Core.UnitTest\\TestImages\\huff_dictionary_test.bi");
-            foreach (byte b in storedBytes)
-                Console.WriteLine(b);
-            Console.WriteLine("&&&&&&&&&&&");
+            int iii = 0;
+            Dictionary<char, string> storedDictionary = HuffmanDecompression.ReadDictionary(storedBytes, ref iii);
+
+            foreach(var v in storedDictionary)
+            {
+                Console.WriteLine("key:"+Convert.ToString((byte)v.Key,2)+ ",value:" + v.Value);
+            }
+            Console.WriteLine("--------------------------------------");
+            foreach (var v in huff.zipCode)
+            {
+                Console.WriteLine("key:" + Convert.ToString((byte)v.Key, 2) + ",value:" + v.Value);
+            }
+
+            Console.WriteLine("--------------------------------------");
         }
 
 
         private readonly char[] data;
-        private readonly Dictionary<char, string> zipCode;
-        private readonly HuffmanTree tree;
+        public readonly Dictionary<char, string> zipCode;
 
         public HuffmanCompression(byte[] originData)
         {
@@ -76,7 +85,7 @@ namespace PhotoSupermarket.Core.Compression
                     byte code = Convert.ToByte(v.Value, 2);
                     fs.Write(new byte[] { code }, 0, 1);
 
-                    Console.WriteLine((int)v.Key + "&" + v.Value.Length + "&" + (int)code);
+                    //Console.WriteLine((int)v.Key + "&" + v.Value.Length + "&" + (int)code);
                 }
             }
         }
@@ -88,13 +97,13 @@ namespace PhotoSupermarket.Core.Compression
             {
                 zipCode.TryGetValue(c, out string value);
                 temp += value ?? throw new NullReferenceException("字典中没有找到响应值");
-                Console.WriteLine("the value:" + value);
+                //Console.WriteLine("the value:" + value);
                 if (temp.Length >= 8)
                 {
                     byte oneByte = Convert.ToByte(temp.Substring(0, 8), 2);
                     temp = temp.Remove(0, 8);
                     fs.Write(new byte[] { oneByte }, 0, 1);
-                    Console.WriteLine("the byte:" + Convert.ToString((int)oneByte, 2));
+                    //Console.WriteLine("the byte:" + Convert.ToString((int)oneByte, 2));
                 }
             }
 
