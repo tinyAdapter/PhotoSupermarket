@@ -9,27 +9,6 @@ namespace PhotoSupermarket.Core.Compression
     public class HuffmanCompression
     {
 
-        public static void Test()
-        {
-            byte[] bytes = new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 };
-            HuffmanCompression huff = new HuffmanCompression(bytes);
-            huff.Compress("F:\\CourseFile\\MultimediaTechnology\\PhotoSupermarket\\PhotoSupermarket.Core.UnitTest\\TestImages\\huff_dictionary_test.bi");
-            byte[] storedBytes = File.ReadAllBytes("F:\\CourseFile\\MultimediaTechnology\\PhotoSupermarket\\PhotoSupermarket.Core.UnitTest\\TestImages\\huff_dictionary_test.bi");
-            int iii = 0;
-            Dictionary<char, string> storedDictionary = HuffmanDecompression.ReadDictionary(storedBytes, ref iii);
-
-            foreach(var v in storedDictionary)
-            {
-                Console.WriteLine("key:"+Convert.ToString((byte)v.Key,2)+ ",value:" + v.Value);
-            }
-            Console.WriteLine("--------------------------------------");
-            foreach (var v in huff.zipCode)
-            {
-                Console.WriteLine("key:" + Convert.ToString((byte)v.Key, 2) + ",value:" + v.Value);
-            }
-
-            Console.WriteLine("--------------------------------------");
-        }
 
 
         private readonly char[] data;
@@ -110,11 +89,10 @@ namespace PhotoSupermarket.Core.Compression
             if (temp.Length > 0)
             {
                 fs.Write(new byte[] { (byte)(Convert.ToInt32(temp, 2) << (8 - temp.Length)) }, 0, 1);
+                fs.Write(new byte[] { (byte)(8 - temp.Length) }, 0, 1);
             }
             else if (temp.Length == 0)
-            {
                 fs.Write(new byte[] { 0 }, 0, 1);
-            }
         }
     }
 }
