@@ -61,8 +61,8 @@ namespace PhotoSupermarket.Core.Compression
 
             ImageFile.SaveBmpImage(pImage, savedFilePath+ fileName + ".bmp" );
 
-            return pImage;
 
+            return pImage;
         }
 
         private byte PredictSinglePixel(Position pos)
@@ -80,7 +80,5 @@ namespace PhotoSupermarket.Core.Compression
             }
             return (byte)Math.Round(predictResult);
         }
-
-
     }
 }

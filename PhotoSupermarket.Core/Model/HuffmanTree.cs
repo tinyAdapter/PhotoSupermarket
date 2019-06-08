@@ -63,7 +63,12 @@ namespace PhotoSupermarket.Core.Model
             leftChild = l;
             rightChild = r;
         }
-        
+        public InternalNode() : base(0, false)
+        {
+            leftChild = null;
+            rightChild = null;
+        }
+
     }
 
 
