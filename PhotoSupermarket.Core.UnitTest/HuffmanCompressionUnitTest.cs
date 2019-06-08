@@ -23,28 +23,15 @@ namespace PhotoSupermarket.Core.UnitTest
         {
             byte[] bytes = new byte[] { 1, 1, 1, 2, 3, 23, 4, 65, 3, 5, 3, 6, 4, 78, 5, 9, 56, 5, 8, 5, 8, 4, 8, 43, 78, 4, 87 };
             HuffmanCompression huff = new HuffmanCompression(bytes);
-            huff.Compress("F:\\CourseFile\\MultimediaTechnology\\PhotoSupermarket\\PhotoSupermarket.Core.UnitTest\\TestImages\\huff_dictionary_test.bi");
-            byte[] storedBytes = File.ReadAllBytes("F:\\CourseFile\\MultimediaTechnology\\PhotoSupermarket\\PhotoSupermarket.Core.UnitTest\\TestImages\\huff_dictionary_test.bi");
-            int iii = 0
-            Dictionary<char, string> storedDictionary = HuffmanDecompression.ReadDictionary(storedBytes, ref iii);
+            huff.Compress("F:\\CourseFile\\MultimediaTechnology\\PhotoSupermarket\\PhotoSupermarket.Core.UnitTest\\TestImages\\huffman_compressed_data.bi");
+            byte[] storedBytes = File.ReadAllBytes("F:\\CourseFile\\MultimediaTechnology\\PhotoSupermarket\\PhotoSupermarket.Core.UnitTest\\TestImages\\huffman_compressed_data.bi");
+            HuffmanDecompression decompression = new HuffmanDecompression("F:\\CourseFile\\MultimediaTechnology\\PhotoSupermarket\\PhotoSupermarket.Core.UnitTest\\TestImages\\huffman_compressed_data.bi");
+            byte[] decompressedBytes = decompression.Decompress();
 
-            foreach (var v in storedDictionary)
+            Assert.Equal(bytes.Length, decompressedBytes.Length);
+            for(int i = 0; i < decompressedBytes.Length; i++)
             {
-                Console.WriteLine("key:" + Convert.ToString((byte)v.Key, 2) + ",value:" + v.Value);
-            }
-            Console.WriteLine("--------------------------------------");
-            foreach (var v in huff.zipCode)
-            {
-                Console.WriteLine("key:" + Convert.ToString((byte)v.Key, 2) + ",value:" + v.Value);
-            }
-
-            Console.WriteLine("--------------------------------------");
-
-            HuffmanDecompression decomp = new HuffmanDecompression("F:\\CourseFile\\MultimediaTechnology\\PhotoSupermarket\\PhotoSupermarket.Core.UnitTest\\TestImages\\huff_dictionary_test.bi");
-            char[] rddd = decomp.Decompress();
-            for (int i = 0; i < rddd.Length; i++)
-            {
-                Console.Write(rddd[i] == (char)bytes[i]);
+                Assert.Equal(bytes[i], decompressedBytes[i]);
             }
         }
 

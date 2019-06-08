@@ -5,7 +5,7 @@ using System.IO;
 
 namespace PhotoSupermarket.Core.Compression
 {
-    class HuffmanDecompression
+    public class HuffmanDecompression
     {
         private string filePath;
         private Dictionary<char, string> dictionary;
@@ -16,7 +16,7 @@ namespace PhotoSupermarket.Core.Compression
             this.filePath = filePath;
         }
 
-        public char[] Decompress()
+        public byte[] Decompress()
         {
             byte[] fileBytes = File.ReadAllBytes(filePath);
 
@@ -28,12 +28,12 @@ namespace PhotoSupermarket.Core.Compression
 
             int lastByteOffset = fileBytes[currentIndex];
 
-            char[] data = ReadData(huffTree, bitArray, lastByteOffset);
+            byte[] data = ReadData(huffTree, bitArray, lastByteOffset);
 
             return data;
         }
 
-        private char[] ReadData(HuffmanTree huffTree, char[] bitArray, int lastByteOffset)
+        private byte[] ReadData(HuffmanTree huffTree, char[] bitArray, int lastByteOffset)
         {
             string data = "";
 
@@ -60,14 +60,14 @@ namespace PhotoSupermarket.Core.Compression
                 }
             }
 
-            return data.ToCharArray();
-        }
+            char[] ca = data.ToCharArray();
+            byte[] result = new byte[data.Length];
+            for (int i = 0; i < result.Length; i++)
+                result[i]= (byte)ca[i];
 
-        public Dictionary<char, string> ReadDictionary(byte[] storedBytes, ref int iii)
-        {
-            throw new NotImplementedException();
+            return result;
         }
-
+             
         private char[] ReadBitArray(byte[] fileBytes, ref int currentIndex)
         {
             string data = "";
