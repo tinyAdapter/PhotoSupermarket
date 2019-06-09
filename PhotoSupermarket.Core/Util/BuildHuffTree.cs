@@ -55,6 +55,11 @@ namespace PhotoSupermarket.Core.Util
 
         }
 
+        public HuffmanTree Tree()
+        {
+            return new HuffmanTree(nodes[0]);
+        }
+
         private void IterativeTraverse(InternalNode node, string zipcode)
         {
             if (node.leftChild.isLeaf)
