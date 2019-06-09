@@ -111,8 +111,18 @@ namespace PhotoSupermarket.Console
                         string SavePath = System.Console.ReadLine();
                         ImageFile.SaveBmpImage(image, @SavePath);
                         System.Console.WriteLine("成功保存文件到：{0}", SavePath);
-                        
-                        isExit = true;
+                        System.Console.WriteLine("显示图片？(1 or 2）");
+                        int display = Convert.ToInt32(System.Console.ReadLine());
+                        if (display == 1)
+                        {
+                            showPhoto(SavePath);
+                        }
+                        System.Console.WriteLine("是否继续？(1 or 2）");
+                        int goon = Convert.ToInt32(System.Console.ReadLine());
+                        if(goon == 2)
+                        {
+                            isExit = true;
+                        }
                     }
                     else
                     {
@@ -365,15 +375,7 @@ namespace PhotoSupermarket.Console
                 System.Console.WriteLine("进行直方图均衡.....");
                 image = new GrayEqualization(image).Equalization().Image;
                 System.Console.WriteLine("完成直方图均衡！");
-                System.Console.WriteLine("save photo to:");
-                string savePath = System.Console.ReadLine();
-                ImageFile.SaveBmpImage(image, savePath);
-                System.Console.WriteLine("显示图片？(1 or 2）");
-                int display = Convert.ToInt32(System.Console.ReadLine());
-                if (display == 1)
-                {
-                    showPhoto(savePath);
-                }
+                
             }
             else if(photoFormat == 2)
             {
@@ -420,6 +422,7 @@ namespace PhotoSupermarket.Console
                                 string fileName = Path.GetFileNameWithoutExtension(CompressPath);
                                 LinearPredictor lp = new LinearPredictor(image, savedFilePath, fileName);
                                 lp.predicate();
+                                //system.console.writeline("{0},{1}", savedfilepath, filename);
                                 System.Console.WriteLine("***************保存中***************");
                                 System.Console.WriteLine("压缩文件已保存至{0}\n",CompressPath);
                             }
