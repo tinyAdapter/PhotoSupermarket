@@ -19,7 +19,8 @@ namespace PhotoSupermarket.Core.Compression
         private string savedFilePath;
         private string fileName;
 
-        /** user can ignore the collections of correalations, it will be set first order
+        /*
+         * user can ignore the collections of correalations, it will be set first order
          */
         public LinearPredictor(BmpImage image, string savedFilePath, string fileName, float[] cocs = null)
         {
