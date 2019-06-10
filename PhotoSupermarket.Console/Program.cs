@@ -25,27 +25,6 @@ namespace PhotoSupermarket.Console
                 System.Console.WriteLine("继续进行文件操作吗？（Y/N）");
                 goOn = System.Console.ReadLine();
             } while (goOn == "Y" || goOn == "y");
-
-            //string filePathName = "c:/photo/2.bmp";//定义图像文件的位置（包括路径及文件名）
-
-            ////建立新的系统进程    
-            //System.Diagnostics.Process process = new System.Diagnostics.Process();
-
-            ////设置图片的真实路径和文件名    
-            //process.StartInfo.FileName = filePathName;
-
-            ////设置进程运行参数，这里以最大化窗口方法显示图片。    
-            //process.StartInfo.Arguments = "rundl132.exe C://WINDOWS//system32//shimgvw.dll,ImageView_Fullscreen";
-
-            ////此项为是否使用Shell执行程序，因系统默认为true，此项也可不设，但若设置必须为true    
-            //process.StartInfo.UseShellExecute = true;
-
-            ////此处可以更改进程所打开窗体的显示样式，可以不设    
-            //process.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
-            //process.Start();
-            //process.Close();
-
-
         }
 
         private static void showPhoto(string filePath)
@@ -107,18 +86,7 @@ namespace PhotoSupermarket.Console
                     }
                     else if (num == 4)
                     {
-                        System.Console.WriteLine("另存为：");
-                        string SavePath = System.Console.ReadLine();
-                        ImageFile.SaveBmpImage(image, @SavePath);
-                        System.Console.WriteLine("成功保存文件到：{0}", SavePath);
-                        System.Console.WriteLine("显示图片？(1 or 2）");
-                        int display = Convert.ToInt32(System.Console.ReadLine());
-                        if (display == 1)
-                        {
-                            showPhoto(SavePath);
-                        }
-                        System.Console.WriteLine("是否继续？(1 or 2）");
-                        int goon = Convert.ToInt32(System.Console.ReadLine());
+                        int goon = SavePhoto(image);
                         if(goon == 2)
                         {
                             isExit = true;
@@ -198,6 +166,23 @@ namespace PhotoSupermarket.Console
                 return 0;
         }
 
+        private static int SavePhoto(BmpImage image)
+        {
+            System.Console.WriteLine("另存为：");
+            string SavePath = System.Console.ReadLine();
+            ImageFile.SaveBmpImage(image, @SavePath);
+            System.Console.WriteLine("成功保存文件到：{0}", SavePath);
+            System.Console.WriteLine("显示图片？(1 or 2）");
+            int display = Convert.ToInt32(System.Console.ReadLine());
+            if (display == 1)
+            {
+                showPhoto(SavePath);
+            }
+            System.Console.WriteLine("是否继续？(1 or 2）");
+            int goon = Convert.ToInt32(System.Console.ReadLine());
+            return goon;
+        }
+
         private static void ModuleOne(BmpImage image)
         {
             /*
@@ -218,7 +203,7 @@ namespace PhotoSupermarket.Console
             {
                 
                 System.Console.Write("检测到图片为灰度图像：");
-                System.Console.WriteLine("可进行的操作：\n1.单阈值法\n2.dither\n3.ordered dither\n0.Exit");
+                System.Console.WriteLine("可进行的操作：\n1.单阈值法\n2.dither\n3.ordered dither\n0.返回");
                 System.Console.Write("选择的操作是：");
                 bool inputNum = false;
                 int argument;
@@ -251,6 +236,7 @@ namespace PhotoSupermarket.Console
                                 {
                                     System.Console.WriteLine("err:null");
                                 }
+                                System.Console.WriteLine("完成单阈值法处理！");
                             }
                             //2.dither
                             else if (num == 2)
@@ -274,6 +260,7 @@ namespace PhotoSupermarket.Console
                                 {
                                     System.Console.WriteLine("err:null");
                                 }
+                                System.Console.WriteLine("完成dither矩阵处理！");
                             }
                             //3.ordered dither
                             else if (num == 3)
@@ -281,6 +268,7 @@ namespace PhotoSupermarket.Console
                                 System.Console.Write("输入矩阵参数n（输入0则取默认值N=2）：");
                                 argument = Convert.ToInt32(System.Console.ReadLine());
                                 image = new OrderedDitherConverter(image, argument).Convert().Image;
+                                System.Console.WriteLine("完成ordered dither矩阵处理！");
                             }
                             else{ ; }
                         }
@@ -425,6 +413,7 @@ namespace PhotoSupermarket.Console
                                 //system.console.writeline("{0},{1}", savedfilepath, filename);
                                 System.Console.WriteLine("***************保存中***************");
                                 System.Console.WriteLine("压缩文件已保存至{0}\n",CompressPath);
+                                System.Console.WriteLine("完成无损预测编码！");
                             }
                             //2.均匀量化
                             else if (num == 2)
@@ -441,6 +430,7 @@ namespace PhotoSupermarket.Console
                                     UniformQuantizing uq = new UniformQuantizing(image, CompressRatio);
                                     image = uq.InverseUniformQuantizaing();
                                 }
+                                System.Console.WriteLine("完成均匀量化！");
                             }
                             //3.DCT变换及DCT反变换
                             else if (num == 3)
@@ -458,10 +448,23 @@ namespace PhotoSupermarket.Console
                                 System.Console.WriteLine("\n把DCT反变换的结果存储至：");
                                 string reverseImagePath = System.Console.ReadLine();
                                 ImageFile.SaveBmpImage(reverseImage, @reverseImagePath);
-                                
+                                System.Console.WriteLine("显示图片？(1 or 2）");
+                                int display1 = Convert.ToInt32(System.Console.ReadLine());
+                                if (display1 == 1)
+                                {
+                                    showPhoto(reverseImagePath);
+                                }
+
                                 System.Console.WriteLine("把DCT反变换(50%)的结果存储至：");
                                 string reverseHalfImagePath = System.Console.ReadLine();
                                 ImageFile.SaveBmpImage(reverseHalfImage, @reverseHalfImagePath);
+                                System.Console.WriteLine("显示图片？(1 or 2）");
+                                int display2 = Convert.ToInt32(System.Console.ReadLine());
+                                if (display2 == 1)
+                                {
+                                    showPhoto(reverseHalfImagePath);
+                                }
+                                System.Console.WriteLine("完成DCT变换及反变换！");
                             }
                             else
                             {
@@ -492,5 +495,7 @@ namespace PhotoSupermarket.Console
                 System.Console.Write("\n图片形式不支持图像压缩哟~\n");
             }
         }
+
+        
     }
 }
