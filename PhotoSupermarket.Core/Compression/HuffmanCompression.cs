@@ -15,11 +15,6 @@ namespace PhotoSupermarket.Core.Compression
         {
             data = BytesToChars(originData);
             zipCode = new BuildHuffTree(data).generateZipcode();
-            foreach (var v in zipCode)
-            {
-                System.Console.WriteLine("k:" +Convert.ToInt16(v.Key) + "v:" + v.Value);
-            }
-            System.Console.WriteLine("______________________________");
         }
 
         private char[] BytesToChars(byte[] bytes)

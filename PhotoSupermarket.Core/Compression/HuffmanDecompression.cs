@@ -113,10 +113,6 @@ namespace PhotoSupermarket.Core.Compression
             HuffmanTree tree = new HuffmanTree(new InternalNode());
             foreach (var v in dictionary)
             {
-                System.Console.WriteLine("k:" + Convert.ToInt16(v.Key) + "v:" + v.Value);
-            }
-            foreach (var v in dictionary)
-            {
                 char[] huffcode = v.Value.ToCharArray();
                 InternalNode currentInternalNode = (InternalNode)tree.root;
                 for (int i = 0; i < huffcode.Length - 1; i++)
