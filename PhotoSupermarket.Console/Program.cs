@@ -15,7 +15,6 @@ namespace PhotoSupermarket.Console
     {
         static void Main(string[] args)
         {
-
             string goOn;
             System.Console.WriteLine("PhotoSupermarket - A Better Photoshop (?)");
             System.Console.WriteLine("Still under construction. Please wait...");

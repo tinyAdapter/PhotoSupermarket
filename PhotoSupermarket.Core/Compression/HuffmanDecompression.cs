@@ -54,7 +54,7 @@ namespace PhotoSupermarket.Core.Compression
                     if (currentNode is LeafNode)
                     {
                         data += ((LeafNode)currentNode).E;
-                        Console.Write(Convert.ToInt32(((LeafNode)currentNode).E)+" ");
+                        Console.Write(Convert.ToInt32(((LeafNode)currentNode).E) + " ");
                         break;
                     }
                 }
@@ -63,18 +63,18 @@ namespace PhotoSupermarket.Core.Compression
             char[] ca = data.ToCharArray();
             byte[] result = new byte[data.Length];
             for (int i = 0; i < result.Length; i++)
-                result[i]= (byte)ca[i];
+                result[i] = (byte)ca[i];
 
             return result;
         }
-             
+
         private char[] ReadBitArray(byte[] fileBytes, ref int currentIndex)
         {
             string data = "";
             byte[] compressedData = new byte[fileBytes.Length - currentIndex - 1];
             for (int i = 0; i < compressedData.Length; i++)
             {
-                data += Convert.ToString(fileBytes[currentIndex++],2).PadLeft(8,'0');
+                data += Convert.ToString(fileBytes[currentIndex++], 2).PadLeft(8, '0');
                 //compressedData[i] = fileBytes[currentIndex++];
                 //Console.WriteLine(Convert.ToString(compressedData[i], 2));
             }
@@ -91,13 +91,18 @@ namespace PhotoSupermarket.Core.Compression
             Dictionary<char, string> dictionary = new Dictionary<char, string>();
             char key;
             int codeLength;
-            string value;
+            string value = "";
             for (int i = 0; i < dictionarySize; i++)
             {
                 key = (char)fileBytes[currentIndex++];
                 codeLength = fileBytes[currentIndex++];
-                value = Convert.ToString(fileBytes[currentIndex++], 2).PadLeft(codeLength, '0');
+                for (int j = 0; i < codeLength / 8; j++)
+                {
+                    value += Convert.ToString(fileBytes[currentIndex++], 2).PadLeft(8, '0');
+                }
+                value += Convert.ToString(fileBytes[currentIndex++], 2).PadLeft(codeLength % 8, '0');
                 dictionary.Add(key, value);
+                value = "";
             }
 
             return dictionary;
@@ -106,7 +111,10 @@ namespace PhotoSupermarket.Core.Compression
         private HuffmanTree RebuildTree(Dictionary<char, string> dictionary)
         {
             HuffmanTree tree = new HuffmanTree(new InternalNode());
-
+            foreach (var v in dictionary)
+            {
+                System.Console.WriteLine("k:" + Convert.ToInt16(v.Key) + "v:" + v.Value);
+            }
             foreach (var v in dictionary)
             {
                 char[] huffcode = v.Value.ToCharArray();

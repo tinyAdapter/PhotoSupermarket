@@ -8,9 +8,6 @@ namespace PhotoSupermarket.Core.Compression
 {
     public class HuffmanCompression
     {
-
-
-
         private readonly char[] data;
         public readonly Dictionary<char, string> zipCode;
 
@@ -18,6 +15,11 @@ namespace PhotoSupermarket.Core.Compression
         {
             data = BytesToChars(originData);
             zipCode = new BuildHuffTree(data).generateZipcode();
+            foreach (var v in zipCode)
+            {
+                System.Console.WriteLine("k:" +Convert.ToInt16(v.Key) + "v:" + v.Value);
+            }
+            System.Console.WriteLine("______________________________");
         }
 
         private char[] BytesToChars(byte[] bytes)
@@ -61,7 +63,14 @@ namespace PhotoSupermarket.Core.Compression
                     int codeLength = v.Value.Length;
                     fs.Write(new byte[] { (byte)codeLength }, 0, 1);
 
-                    byte code = Convert.ToByte(v.Value, 2);
+                    string temp = v.Value;
+                    for (int i = 0; temp.Length > 8;i++)
+                    {
+                        byte fullByte = Convert.ToByte(temp.Substring(0, 8),2);
+                        fs.Write(new byte[] { fullByte }, 0, 1);
+                        temp = temp.Substring(8);
+                    }
+                    byte code = Convert.ToByte(temp, 2);
                     fs.Write(new byte[] { code }, 0, 1);
 
                     //Console.WriteLine((int)v.Key + "&" + v.Value.Length + "&" + (int)code);
