@@ -59,8 +59,11 @@ namespace PhotoSupermarket.Core.Compression
 
             BmpImage pImage = BmpImageAllocator.NewGrayScaleImage(width, height, newData);
 
-            ImageFile.SaveBmpImage(pImage, savedFilePath+ fileName + ".bmp" );
+            ImageFile.SaveBmpImage(pImage, savedFilePath+"//"+fileName + ".bmp" );
 
+            HuffmanCompression huffCompress = new HuffmanCompression(newData);
+
+            huffCompress.Compress(savedFilePath + "//" + fileName + ".dat");
 
             return pImage;
         }
