@@ -43,13 +43,25 @@ namespace PhotoSupermarket.Core.Compression
                         }
                     }
                     double[,] dctBlock = GenerateDCTBlock(block);
+
+                    double min = 99999999;
+                    double max = -99999999;
+                    for (int m = 0; m < BlockSize; m++)
+                    {
+                        for (int n = 0; n < BlockSize; n++)
+                        {
+                            if (dctBlock[m, n] > max) max = dctBlock[m, n];
+                            if (dctBlock[m, n] < min) min = dctBlock[m, n];
+                        }
+                    }
+
                     for (int m = 0; m < BlockSize; m++)
                     {
                         for (int n = 0; n < BlockSize; n++)
                         {
                             result.Data.Set8BitDataAt(
                                 BlockSize * i + m, BlockSize * k + n,
-                                (byte)((dctBlock[m, n] + 128) / 2));
+                                (byte)((dctBlock[m, n] - min) / (max - min) * 255));
                             DCTData[BlockSize * i + m, BlockSize * k + n] = dctBlock[m, n];
                         }
                     }

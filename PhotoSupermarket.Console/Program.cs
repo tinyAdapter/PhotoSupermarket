@@ -15,6 +15,7 @@ namespace PhotoSupermarket.Console
     {
         static void Main(string[] args)
         {
+
             string goOn;
             System.Console.WriteLine("PhotoSupermarket - A Better Photoshop (?)");
             System.Console.WriteLine("Still under construction. Please wait...");
@@ -86,7 +87,7 @@ namespace PhotoSupermarket.Console
                     else if (num == 4)
                     {
                         int goon = SavePhoto(image);
-                        if(goon == 2)
+                        if (goon == 2)
                         {
                             isExit = true;
                         }
@@ -100,7 +101,7 @@ namespace PhotoSupermarket.Console
                 {
                     System.Console.WriteLine("err:转化的不是一个int型数据");
                 }
-                catch(FormatException)
+                catch (FormatException)
                 {
                     System.Console.WriteLine("err:格式错误");
                 }
@@ -131,7 +132,7 @@ namespace PhotoSupermarket.Console
                 {
                     InputPath = true;
                     return FilePath;
-                    
+
                 }
             } while (InputPath == false);
             return " ";
@@ -162,7 +163,7 @@ namespace PhotoSupermarket.Console
             {
                 return 0;
             }
-                return 0;
+            return 0;
         }
 
         private static int SavePhoto(BmpImage image)
@@ -200,7 +201,7 @@ namespace PhotoSupermarket.Console
             //256 color
             if (photoFormat == 1)
             {
-                
+
                 System.Console.Write("检测到图片为灰度图像：");
                 System.Console.WriteLine("可进行的操作：\n1.单阈值法\n2.dither\n3.ordered dither\n0.返回");
                 System.Console.Write("选择的操作是：");
@@ -269,7 +270,7 @@ namespace PhotoSupermarket.Console
                                 image = new OrderedDitherConverter(image, argument).Convert().Image;
                                 System.Console.WriteLine("完成ordered dither矩阵处理！");
                             }
-                            else{ ; }
+                            else {; }
                         }
                         else
                         {
@@ -291,7 +292,7 @@ namespace PhotoSupermarket.Console
                 } while (inputNum == false);
             }
             //True color or RGBA
-            else if(photoFormat == 2)
+            else if (photoFormat == 2)
             {
                 System.Console.Write("检测到图片为真彩图像：");
                 System.Console.WriteLine("可进行的操作：\n1.RGB->HSI\n2.RGB->YCbCr\n0.返回");
@@ -315,7 +316,7 @@ namespace PhotoSupermarket.Console
                             {
                                 image = new YCbCrConverter(image).Convert().Image;
                             }
-                            else{ ; }
+                            else {; }
                         }
                         else
                         {
@@ -356,24 +357,70 @@ namespace PhotoSupermarket.Console
              */
 
             int photoFormat = CheckPhoto(image);
-            if(photoFormat == 1)
+            if (photoFormat == 1)
             {
                 System.Console.Write("\n检测到图片为灰度图像");
                 System.Console.WriteLine("进行直方图均衡.....");
-                image = new GrayEqualization(image).Equalization().Image;
+                var ge = new GrayEqualization(image);
+                image = ge.Equalization().Image;
                 System.Console.WriteLine("完成直方图均衡！");
-                
+                System.Console.WriteLine("----原始图像直方图----");
+                DrawHistogram(image.Data.Width * image.Data.Height, ge.hist);
+                var sv = new int[256];
+                for (int i = 0; i < image.Data.Width; i++)
+                {
+                    for (int k = 0; k < image.Data.Height; k++)
+                    {
+                        sv[image.Data.Get8BitDataAt(i, k)]++;
+                    }
+                }
+                System.Console.WriteLine("----均衡图像直方图----");
+                DrawHistogram(image.Data.Width * image.Data.Height, sv);
             }
-            else if(photoFormat == 2)
+            else if (photoFormat == 2)
             {
                 System.Console.Write("\n检测到图片为彩色图像");
                 System.Console.WriteLine("进行直方图均衡(彩色变换为RGB->HSV).....");
-                image = new ColorEqualization(image).Equalization().Image;
+                var ge = new ColorEqualization(image);
+                image = ge.Equalization().Image;
                 System.Console.WriteLine("完成直方图均衡！");
+                System.Console.WriteLine("----原始图像直方图----");
+                DrawHistogram(image.Data.Width * image.Data.Height, ge.histV);
+                var sv = new int[256];
+                for (int i = 0; i < image.Data.Width; i++)
+                {
+                    for (int k = 0; k < image.Data.Height; k++)
+                    {
+                        var rgb = image.Data.GetRGBDataAt(i, k);
+                        sv[(rgb.R + rgb.G + rgb.B) / 3]++;
+                    }
+                }
+                System.Console.WriteLine("----均衡图像直方图----");
+                DrawHistogram(image.Data.Width * image.Data.Height, sv);
             }
             else
             {
                 System.Console.Write("\n图片形式不支持模块转换哟~\n");
+            }
+        }
+
+        private static void DrawHistogram(int size, int[] arr)
+        {
+            int[] regions = new int[16];
+
+            for (int i = 0; i < 256; i++)
+            {
+                regions[i / 16] += arr[i];
+            }
+
+            for (int i = 0; i < 16; i++)
+            {
+                System.Console.Write("{0}\t", i);
+                for (int k = 0; k < (float) regions[i] / size * 60; k++)
+                {
+                    System.Console.Write("*");
+                }
+                System.Console.WriteLine("    {0}", regions[i]);
             }
         }
 
@@ -387,7 +434,7 @@ namespace PhotoSupermarket.Console
              */
 
             int photoFormat = CheckPhoto(image);
-            if(photoFormat == 1)
+            if (photoFormat == 1)
             {
                 System.Console.WriteLine("\n检测图片为8bit灰度图像");
                 System.Console.WriteLine("可选择的压缩模式：\n1.无损预测编码\n2.均匀量化\n3.DCT变换及DCT反变换\n0.返回");
@@ -411,7 +458,7 @@ namespace PhotoSupermarket.Console
                                 lp.predicate();
                                 //system.console.writeline("{0},{1}", savedfilepath, filename);
                                 System.Console.WriteLine("***************保存中***************");
-                                System.Console.WriteLine("压缩文件已保存至{0}\n",CompressPath);
+                                System.Console.WriteLine("压缩文件已保存至{0}\n", CompressPath);
                                 System.Console.WriteLine("完成无损预测编码！");
                             }
                             //2.均匀量化
@@ -419,7 +466,7 @@ namespace PhotoSupermarket.Console
                             {
                                 System.Console.WriteLine("\n压缩比（输如0为IGS量化）：");
                                 double CompressRatio = Convert.ToDouble(System.Console.ReadLine());
-                                if(CompressRatio == 0)
+                                if (CompressRatio == 0)
                                 {
                                     UniformQuantizing igs = new UniformQuantizing(image);
                                     image = igs.InverseUniformQuantizaing();
@@ -495,6 +542,6 @@ namespace PhotoSupermarket.Console
             }
         }
 
-        
+
     }
 }

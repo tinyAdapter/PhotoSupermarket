@@ -39,7 +39,7 @@ namespace PhotoSupermarket.Core.HistogramEqualization
 
             for (int i = 0; i < level; i++)
             {
-                hist_acc[i] = hist_acc[i];
+                hist_acc[i] = hist[i];
             }
 
             for (int i = 1; i < level; i++)
