@@ -10,6 +10,7 @@ namespace PhotoSupermarket.Core.HistogramEqualization
         {
         }
 
+        public int[] hist_acc;
         public int[] hist;
         public int[] S;
         public int level = 256;
@@ -25,6 +26,7 @@ namespace PhotoSupermarket.Core.HistogramEqualization
         public void GetHistogram()
         {
             hist = new int[level];
+            hist_acc = new int[level];
 
             for (int i = 0; i < oldData.Width; i++)
             {
@@ -35,9 +37,14 @@ namespace PhotoSupermarket.Core.HistogramEqualization
                 }
             }
 
+            for (int i = 0; i < level; i++)
+            {
+                hist_acc[i] = hist_acc[i];
+            }
+
             for (int i = 1; i < level; i++)
             {
-                hist[i] += hist[i-1];
+                hist_acc[i] += hist_acc[i-1];
             }
         }
 
@@ -49,7 +56,7 @@ namespace PhotoSupermarket.Core.HistogramEqualization
             int size = oldData.Width * oldData.Height;
             for (int i = 0; i < level; i++)
             {
-                S[i] = (int)Math.Round((level - 1) * (hist[i] * 1.0) / size);
+                S[i] = (int)Math.Round((level - 1) * (hist_acc[i] * 1.0) / size);
             }
 
             for (int i = 0; i < Image.Data.Width; i++)
